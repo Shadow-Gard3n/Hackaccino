@@ -26,7 +26,7 @@ if not firebase_admin._apps:
     cred = credentials.Certificate("D:\\Coding\\web with python\\FastApi\\project\\serviceAccountKey.json")
     firebase_admin.initialize_app(cred)
 
-FIREBASE_API_KEY = "AIzaSyAndM9OxoBzQE9ap0YCEuPvBGnNmNM7Ayw"
+FIREBASE_API_KEY = ""
 FIREBASE_SIGNIN_URL = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_API_KEY}"
 
 async def create_user(email: str, password: str):
