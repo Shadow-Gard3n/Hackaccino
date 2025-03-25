@@ -1,0 +1,27 @@
+# Ignore Python cache
+__pycache__/
+/routes/__pycache__/
+/service/__pycache__/
+
+# Ignore sensitive keys and credentials
+serviceAccountKey.json
+
+# Ignore environment files
+.env
+
+# Ignore virtual environments
+venv/
+*.pyc
+*.pyo
+
+# Ignore IDE and editor settings
+.vscode/
+.idea/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore system files
+.DS_Store
+Thumbs.db

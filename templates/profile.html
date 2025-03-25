@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile - AI Chat Interface</title>
+    <link rel="stylesheet" href="/static/css/profileStyle.css">
+  </head>
+  <body>
+    <div class="profile-container">
+        <button class="back-to-chat" onclick="goBackToChat()">← Back to Chat</button>
+
+        <script>
+            function goBackToChat() {
+                window.location.href = `/user/{{ user_id }}/chat`;
+            }
+        </script>
+      
+      <div class="profile-content">
+        <div class="profile-header">
+          <img src="https://cdnb.artstation.com/p/assets/images/images/084/124/297/large/matthew-blank-profile-photo-2.jpg?1737590042" alt="Profile" class="profile-large-img">
+          <h2 class="username">John Doe</h2>
+        </div>
+
+        <form class="api-keys-form">
+          <h3>API Keys Configuration</h3>
+          
+          <div class="form-group">
+            <label for="openai-key">OpenAI API Key</label>
+            <input type="password" id="openai-key" placeholder="Enter OpenAI API key">
+          </div>
+
+          <div class="form-group">
+            <label for="grok-key">Grok API Key</label>
+            <input type="password" id="grok-key" placeholder="Enter Grok API key">
+          </div>
+
+          <div class="form-group">
+            <label for="deepseek-key">Deepseek API Key</label>
+            <input type="password" id="deepseek-key" placeholder="Enter Deepseek API key">
+          </div>
+
+          <div class="form-group">
+            <label for="google-key">Google API Key</label>
+            <input type="password" id="google-key" placeholder="Enter Google API key">
+          </div>
+
+          <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+
+        <button class="logout-btn">Logout</button>
+      </div>
+    </div>
+  </body>
+</html>
