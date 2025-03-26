@@ -60,7 +60,7 @@
           <h3>API Keys Configuration</h3>
 
           <input type="hidden" name="user_id" id="user-id" value="{{ user_id }}">
-          
+
           <div class="form-group">
             <label for="openai-key">OpenAI API Key</label>
             <input type="password" id="openai-key" name="openai_key" placeholder="Enter OpenAI API key">
@@ -84,7 +84,12 @@
           <button type="submit" class="save-btn">Save Changes</button>
         </form>
 
-        <button class="logout-btn">Logout</button>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+        <script>
+          function logout() {
+            window.location.href = "/login";
+          }
+        </script>
       </div>
     </div>
   </body>
