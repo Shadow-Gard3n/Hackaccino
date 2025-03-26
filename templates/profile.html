@@ -14,35 +14,71 @@
             function goBackToChat() {
                 window.location.href = `/user/{{ user_id }}/chat`;
             }
+
+            async function fetchUserName() {
+                const userId = window.location.pathname.split('/')[2];
+                try {
+                    const response = await fetch(`/user/${userId}`);
+                    const data = await response.json();
+
+                    if (data.display_name) {
+                        document.querySelector(".username").textContent = data.display_name;
+                    } else {
+                        document.querySelector(".username").textContent = "Unknown User"; 
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    document.querySelector(".username").textContent = "Error Loading Name";
+                }
+            }
+            window.onload = fetchUserName;
+
+            function validateForm(event) {
+                event.preventDefault();
+                const openaiKey = document.getElementById('openai-key').value.trim();
+                const grokKey = document.getElementById('grok-key').value.trim();
+                const deepseekKey = document.getElementById('deepseek-key').value.trim();
+                const googleKey = document.getElementById('google-key').value.trim();
+
+                if (!openaiKey && !grokKey && !deepseekKey && !googleKey) {
+                  alert('Please enter at least one API key.');
+                  return false;
+                }
+
+                alert('Changes saved successfully!');
+                document.querySelector('.api-keys-form').submit();
+        }
         </script>
       
       <div class="profile-content">
         <div class="profile-header">
           <img src="https://cdnb.artstation.com/p/assets/images/images/084/124/297/large/matthew-blank-profile-photo-2.jpg?1737590042" alt="Profile" class="profile-large-img">
-          <h2 class="username">John Doe</h2>
+          <h2 class="username">Loading...</h2>
         </div>
 
-        <form class="api-keys-form">
+        <form class="api-keys-form" method="POST" action="/store-api-keys" onsubmit="return validateForm(event)">
           <h3>API Keys Configuration</h3>
+
+          <input type="hidden" name="user_id" id="user-id" value="{{ user_id }}">
           
           <div class="form-group">
             <label for="openai-key">OpenAI API Key</label>
-            <input type="password" id="openai-key" placeholder="Enter OpenAI API key">
+            <input type="password" id="openai-key" name="openai_key" placeholder="Enter OpenAI API key">
           </div>
 
           <div class="form-group">
             <label for="grok-key">Grok API Key</label>
-            <input type="password" id="grok-key" placeholder="Enter Grok API key">
+            <input type="password" id="grok-key" name="grok_key" placeholder="Enter Grok API key">
           </div>
 
           <div class="form-group">
             <label for="deepseek-key">Deepseek API Key</label>
-            <input type="password" id="deepseek-key" placeholder="Enter Deepseek API key">
+            <input type="password" id="deepseek-key" name="deepseek_key" placeholder="Enter Deepseek API key">
           </div>
 
           <div class="form-group">
             <label for="google-key">Google API Key</label>
-            <input type="password" id="google-key" placeholder="Enter Google API key">
+            <input type="password" id="google-key" name="google_key" placeholder="Enter Google API key">
           </div>
 
           <button type="submit" class="save-btn">Save Changes</button>

@@ -1,24 +1,27 @@
 # Ignore Python cache
 __pycache__/
-/routes/__pycache__/
-/service/__pycache__/
+**/__pycache__/
 
-# Ignore sensitive keys and credentials
-serviceAccountKey.json
-
-# Ignore environment files
-.env
+# Ignore compiled Python files
+*.pyc
+*.pyo
+*.pyd
 
 # Ignore virtual environments
 venv/
-*.pyc
-*.pyo
+env/
+
+# Ignore sensitive keys and credentials
+serviceAccountKey.json
+serviceDatabaseKey.json
+.env
 
 # Ignore IDE and editor settings
 .vscode/
 .idea/
 
 # Ignore logs and temporary files
+logs/
 *.log
 *.tmp
 
