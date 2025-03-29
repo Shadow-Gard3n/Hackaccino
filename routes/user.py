@@ -1,12 +1,14 @@
-from fastapi import APIRouter, Request, Form, Depends
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Request, Form, Depends, File, UploadFile
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from service.firebase_service import create_user, login_user
 from fastapi.responses import RedirectResponse
 from firebase_admin import auth
 from fastapi import APIRouter, HTTPException
 from models.ApiDatabase import APIKeys
-from service.firebase_config import db
+from service.firebase_service import db
+from service.llm import gen_ai
+
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -49,3 +51,19 @@ async def store_api_keys(
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.post("/prompt")
+async def get_prompt(
+    message: str = Form(...),
+    file: UploadFile = File(None),
+    model: str = Form(...),
+    search: str = Form(...)
+):
+    file_info = {
+        "file_name": file.filename if file else "No file uploaded",
+        "file_content_type": file.content_type if file else "None"
+    }
+    ai_response = gen_ai(message)
+    return JSONResponse(content={"user_message": message, "ai_response": ai_response})
+
+

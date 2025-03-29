@@ -20,7 +20,6 @@
                 try {
                     const response = await fetch(`/user/${userId}`);
                     const data = await response.json();
-
                     if (data.display_name) {
                         document.querySelector(".username").textContent = data.display_name;
                     } else {
@@ -31,6 +30,7 @@
                     document.querySelector(".username").textContent = "Error Loading Name";
                 }
             }
+
             window.onload = fetchUserName;
 
             function validateForm(event) {
@@ -47,7 +47,7 @@
 
                 alert('Changes saved successfully!');
                 document.querySelector('.api-keys-form').submit();
-        }
+            }
         </script>
       
       <div class="profile-content">

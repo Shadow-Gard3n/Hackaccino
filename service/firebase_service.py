@@ -1,6 +1,6 @@
 import os
 import firebase_admin
-from firebase_admin import auth, credentials
+from firebase_admin import auth, credentials, firestore
 import requests
 from dotenv import load_dotenv
 
@@ -10,6 +10,7 @@ if not firebase_admin._apps:
     cred = credentials.Certificate("D:\\Coding\\web with python\\FastApi\\project\\serviceAccountKey.json")
     firebase_admin.initialize_app(cred)
 
+db = firestore.client()
 FIREBASE_API_KEY = os.getenv("FIREBASE_API_KEY")
 FIREBASE_SIGNIN_URL = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_API_KEY}"
 

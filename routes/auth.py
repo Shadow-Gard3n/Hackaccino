@@ -7,7 +7,6 @@ from firebase_admin import auth
 from fastapi import APIRouter, HTTPException
 from firebase_admin import firestore
 
-
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
