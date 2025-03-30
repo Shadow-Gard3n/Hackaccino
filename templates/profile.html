@@ -18,7 +18,7 @@
             async function fetchUserName() {
                 const userId = window.location.pathname.split('/')[2];
                 try {
-                    const response = await fetch(`/user/${userId}`);
+                    const response = await fetch(`/user/me`);
                     const data = await response.json();
                     if (data.display_name) {
                         document.querySelector(".username").textContent = data.display_name;
@@ -87,7 +87,7 @@
         <button class="logout-btn" onclick="logout()">Logout</button>
         <script>
           function logout() {
-            window.location.href = "/login";
+            window.location.href = "/logout";
           }
         </script>
       </div>

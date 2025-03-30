@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Form, Depends, File, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from service.firebase_service import create_user, login_user
+from service.firebase_service import create_user, login_user, get_current_user
 from fastapi.responses import RedirectResponse
 from firebase_admin import auth
 from fastapi import APIRouter, HTTPException
@@ -13,20 +13,33 @@ from service.llm import gen_ai
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-@router.get("/user/{user_id}")
-def get_user(user_id: str):
+@router.get("/user/me")
+async def get_user(request: Request, current_user: str = Depends(get_current_user)):
+    if current_user is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
     try:
-        user = auth.get_user(user_id)
+        user = auth.get_user(current_user)  # Fetch user using session's user ID
         return {"display_name": user.display_name}
     except Exception as e:
-        return {"error": str(e)}
+        raise HTTPException(status_code=500, detail=str(e))
+
     
 @router.get("/user/{user_id}/chat", response_class=HTMLResponse)
-async def chat_page(user_id: str, request: Request):
+async def chat_page(user_id: str, request: Request, current_user: str = Depends(get_current_user)):
+    if current_user is None:
+        return RedirectResponse(url="/login", status_code=303)  # Redirect only if user is not logged in
+    if current_user != user_id:  
+        return RedirectResponse(url=f"/user/{current_user}/chat", status_code=303)  # redirect correctly
     return templates.TemplateResponse("chat.html", {"request": request, "user_id": user_id})
 
+
 @router.get("/user/{user_id}/profile", response_class=HTMLResponse)
-async def profile_page(request: Request, user_id: str):
+async def profile_page(request: Request, user_id: str, current_user: str = Depends(get_current_user)):
+    if current_user is None:
+        return RedirectResponse(url="/login", status_code=303)
+    if current_user != user_id:  
+        return RedirectResponse(url=f"/user/{current_user}/profile", status_code=303)
     return templates.TemplateResponse("profile.html", {"request": request, "user_id": user_id})
 
 @router.post("/store-api-keys")

@@ -28,6 +28,23 @@
     <div class="container">
         <form class="login-form" action="/login/save" method="post">
             <h2>Welcome Back</h2>
+
+            {% if error %}
+                <p style="
+                display: flex;
+                align-items: center;
+                color: #D32F2F;
+                background-color: #FFEBEE;
+                border: 1px solid #D32F2F;
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-size: 14px;
+                margin-top: 15px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                ">{{ error }}</p>
+            {% endif %}
+
+            <br>
             
             <div class="form-group">
                 <input type="email" name="email" required>
@@ -39,7 +56,18 @@
                 <label>Password</label>
             </div>
 
-            <button type="submit" class="login-button">Login</button>
+            <button type="submit" class="login-button" onclick="disableButton(this)">Login</button>
+
+            <script>
+                function disableButton(button) {
+                    button.disabled = true;
+                    button.innerHTML = 'Processing...';
+                    button.form.submit();
+                }
+                if (window.location.search.includes("error=")) {
+                    window.history.replaceState({}, document.title, "/login");
+                }
+            </script>
             
             <div class="signup-link">
                 Already have an account? <a href="/signup">SignUp</a>

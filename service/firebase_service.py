@@ -3,6 +3,9 @@ import firebase_admin
 from firebase_admin import auth, credentials, firestore
 import requests
 from dotenv import load_dotenv
+from fastapi import HTTPException
+from fastapi import Request
+from fastapi.responses import RedirectResponse
 
 load_dotenv()
 
@@ -13,6 +16,21 @@ if not firebase_admin._apps:
 db = firestore.client()
 FIREBASE_API_KEY = os.getenv("FIREBASE_API_KEY")
 FIREBASE_SIGNIN_URL = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_API_KEY}"
+
+
+
+async def get_current_user(request: Request):
+    session_token = request.cookies.get("session")  # check if session exists
+    if not session_token:
+        return None  # redirect if not logged in
+    
+    try:
+        decoded_token = auth.verify_id_token(session_token)
+        user_id = decoded_token.get("uid")
+        return user_id  # return authenticated user's ID
+    except Exception:
+        return None
+
 
 async def create_user(email: str, password: str, name: str):
     try:

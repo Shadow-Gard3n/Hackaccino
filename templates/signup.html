@@ -27,6 +27,23 @@
     <div class="container">
         <form class="signup-form" action="/signup/save" method="post">
             <h2>Create Account</h2>
+            
+            {% if error %}
+                <p style="
+                display: flex;
+                align-items: center;
+                color: #D32F2F;
+                background-color: #FFEBEE;
+                border: 1px solid #D32F2F;
+                padding: 10px 15px;
+                border-radius: 8px;
+                font-size: 14px;
+                margin-top: 15px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                ">{{ error }}</p>
+            {% endif %}
+            
+            <br>
 
             <div class="form-group">
                 <input type="text" name="name" required>
@@ -43,7 +60,19 @@
                 <label>Password</label>
             </div>
 
-            <button type="submit" class="signup-button">Sign Up</button>
+            <button type="submit" class="signup-button" onclick="disableButton(this)">Sign Up</button>
+
+            <script>
+                function disableButton(button) {
+                    button.disabled = true;
+                    button.innerHTML = 'Processing...';
+                    button.form.submit();
+                }
+
+                if (window.location.search.includes("error=")) {
+                    window.history.replaceState({}, document.title, "/signup");
+                }
+            </script>
             
             <div class="login-link">
                 Already have an account? <a href="/login">Login</a>
