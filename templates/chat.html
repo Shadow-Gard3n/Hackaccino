@@ -82,6 +82,7 @@
       function newChat(){
         document.querySelector(".chat-area").innerHTML=""
       }
+
       function displayFileInfo() {
         const fileInput = document.getElementById("fileUpload");
         const fileInfo = document.getElementById("fileInfo");
@@ -100,9 +101,17 @@
       document.getElementById("messageForm").addEventListener("submit", async function(event) {
         event.preventDefault(); 
 
+        let modelDropdown = document.querySelector("select[name='model']");
+        let searchDropdown = document.querySelector("select[name='search']");
+
         let chatArea = document.querySelector(".chat-area");
         let messageInput = document.querySelector("textarea[name='message']");
         let userMessageText = messageInput.value.trim();
+        
+        if (!modelDropdown.value || !searchDropdown.value) {
+        alert("Please select both a model and a search type.");
+        return; 
+        }
 
         if (!userMessageText) return; 
 
@@ -124,7 +133,6 @@
         
         chatArea.appendChild(aiMessage);
         chatArea.scrollTop = chatArea.scrollHeight;
-
 
         // send request
         let formData = new FormData(this);
@@ -171,7 +179,7 @@
 
     document.querySelector("textarea[name='message']").addEventListener("keydown", function(event) {
         if (event.key === "Enter" && !event.shiftKey) { 
-            event.preventDefault(); // Prevents new line  
+            event.preventDefault(); 
             document.getElementById("messageForm").dispatchEvent(new Event("submit", { cancelable: true })); 
         }
     });
