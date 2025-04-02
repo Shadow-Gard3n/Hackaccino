@@ -6,9 +6,12 @@ from fastapi.responses import RedirectResponse
 from firebase_admin import auth
 from fastapi import APIRouter, HTTPException
 from firebase_admin import firestore
+from service.firebase_service import verify_google_token
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+db = firestore.client()
 
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
@@ -26,8 +29,6 @@ async def signup(name: str = Form(...), email: str = Form(...), password: str = 
     
     if "error" in result:
         error_message = result["error"]
-               
-       
         if "INVALID_EMAIL" in error_message:
             error_message = "Invalid email address. Please try with valid email."
         elif "Invalid password string" in error_message:
@@ -62,6 +63,37 @@ async def login(email: str = Form(...), password: str = Form(...)):
     response = RedirectResponse(url=f"/user/{user_id}/chat", status_code=303)
     response.set_cookie(key="session", value=session_token, httponly=True, max_age=604800)  # store session securely
     return response
+
+@router.post("/login/google")
+async def google_login(id_token: str = Form(...)):
+    try:
+        decoded_token = auth.verify_id_token(id_token)
+        user_id = decoded_token["uid"]
+        email = decoded_token.get("email")
+        name = decoded_token.get("name", "")
+
+        if not name:
+            user_record = auth.get_user(user_id)
+            name = user_record.display_name if user_record.display_name else "Unknown User"
+
+        # Check if user exists in Firestore, if not, create a new entry
+        user_ref = db.collection("users").document(user_id)
+        user_data = user_ref.get()
+
+        if not user_data.exists:
+            user_ref.set({
+                "user_id": user_id,
+                "email": email,
+                "name": name
+            })
+
+        response = JSONResponse(content={"user_id": user_id})
+        response.set_cookie(key="session", value=id_token, httponly=True, max_age=604800, secure=True)
+        return response
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=400)
+
 
 @router.get("/logout")
 async def logout():

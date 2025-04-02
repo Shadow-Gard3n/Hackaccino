@@ -5,7 +5,8 @@ import requests
 from dotenv import load_dotenv
 from fastapi import HTTPException
 from fastapi import Request
-from fastapi.responses import RedirectResponse
+
+from google.oauth2 import id_token
 
 load_dotenv()
 
@@ -15,6 +16,7 @@ if not firebase_admin._apps:
 
 db = firestore.client()
 FIREBASE_API_KEY = os.getenv("FIREBASE_API_KEY")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 FIREBASE_SIGNIN_URL = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_API_KEY}"
 
 
@@ -57,5 +59,18 @@ async def login_user(email: str, password: str):
             }
         else:
             return {"error": response.json().get("error", {}).get("message", "Login failed")}
+    except Exception as e:
+        return {"error": str(e)}
+    
+async def verify_google_token(token: str):
+    """ Verify a Firebase authentication token. """
+    try:
+        decoded_token = auth.verify_id_token(token)  # Use Firebase token verification
+        return {
+            "user_id": decoded_token["uid"],  
+            "email": decoded_token["email"],
+            "name": decoded_token.get("name"),
+            "picture": decoded_token.get("picture")
+        }
     except Exception as e:
         return {"error": str(e)}
