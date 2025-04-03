@@ -37,7 +37,7 @@ async def signup(name: str = Form(...), email: str = Form(...), password: str = 
             error_message = "The email is already registered. Try logging in."
         else:
             error_message = result["error"]
-        
+    
         return RedirectResponse(url=f"/signup?error={error_message}", status_code=303)
     return RedirectResponse(url="/login", status_code=303)
 

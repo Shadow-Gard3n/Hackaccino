@@ -138,7 +138,7 @@ h2 {
     align-items: center;
     justify-content: center;
     background-color: #fff;
-    color: #444;
+    color: #757575;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
@@ -147,6 +147,8 @@ h2 {
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
 .google-btn:hover {
@@ -155,5 +157,6 @@ h2 {
 
 .google-btn img {
     height: 20px;
+    width: 20px;
     margin-right: 10px;
 }

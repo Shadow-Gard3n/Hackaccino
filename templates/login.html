@@ -43,7 +43,10 @@
 
             <button type="submit" class="login-button" onclick="disableButton(this)">Login</button>
             <div class="separator">OR</div>
-            <button type="button" id="googleLoginBtn" class="google-btn">Continue with Google</button>
+            <button type="button" id="googleLoginBtn" class="google-btn">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
+                Continue with Google
+            </button>
     
             <div class="signup-link">
                 Already have an account? <a href="/signup">SignUp</a>
@@ -55,7 +58,13 @@
             import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
 
             const firebaseConfig = {
-                
+                apiKey: "AIzaSyAndM9OxoBzQE9ap0YCEuPvBGnNmNM7Ayw",
+                authDomain: "fastapi-researchai.firebaseapp.com",
+                projectId: "fastapi-researchai",
+                storageBucket: "fastapi-researchai.appspot.com",
+                messagingSenderId: "464226295155",
+                appId: "1:464226295155:web:7de2276b035776fe597906",
+                measurementId: "G-S1FNDPS2X7"
             };
 
             // Initialize Firebase
@@ -91,7 +100,6 @@
                 }
             });
 
-
             function disableButton(button) {
                 button.disabled = true;
                 button.innerHTML = 'Processing...';
@@ -100,6 +108,7 @@
             if (window.location.search.includes("error=")) {
                 window.history.replaceState({}, document.title, "/login");
             }
+            
         </script>
     </div>
 </body>

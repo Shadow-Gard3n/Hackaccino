@@ -60,12 +60,13 @@ body {
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border-color);
-  height: 100vh;
+  height: 100%;
   transform: translateX(-100%);
   position: fixed;
   top: 0;
   left: 0;
   transition: transform 0.3s ease-in-out;
+  z-index: 999;
 }
 
 #sidebar-toggle:checked ~ .sidebar {
@@ -147,6 +148,9 @@ body {
   flex-direction: column;
   height: 100vh;
   transition: margin-left 0.3s ease-in-out; /* Add smooth transition */
+
+  /* flex-wrap: wrap; */
+  overflow: hidden;
 }
 
 /* When sidebar is visible, shift the main content */
@@ -163,12 +167,13 @@ body {
   max-height: 500px;
   display: flex;
   flex-direction: column;
+  max-height: calc(100vh - 120px);
 }
 
 .chat-message {
   padding: 10px 15px;
   border-radius: 15px;
-  max-width: 70%;
+  max-width: 85%;
   margin: 5px 10px;
   word-wrap: break-word;
   font-size: 14px;
@@ -182,11 +187,12 @@ body {
 }
 
 .ai-message {
-  background-color: #e5e5e5;
-  color: black;
+  background-color: #0e19ac;
+  color: white;
   align-self: flex-start;
   text-align: left;
 }
+
 .typing-indicator {
   display: inline-flex;
   gap: 3px;
@@ -196,7 +202,7 @@ body {
 .typing-indicator span {
   width: 5px;  
   height: 5px; 
-  background-color: gray;
+  background-color: white;
   border-radius: 50%;
   animation: typing 1.2s infinite;
 }
@@ -220,6 +226,9 @@ body {
 .input-container {
   padding: 1rem;
   border-top: 1px solid var(--border-color);
+  position: sticky;
+  bottom: 0;
+  width: 100%
 }
 
 .input-area {
@@ -246,6 +255,7 @@ textarea {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  flex-wrap: wrap;
 }
 
 .left-controls {
@@ -331,4 +341,13 @@ textarea {
     width: 100%;
     margin-left: 0;
   }
-}
+
+  .input-container {
+    position: fixed;
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    bottom: 0px;
+    width: 100%
+  }
+} 
+
