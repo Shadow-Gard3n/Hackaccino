@@ -5,8 +5,11 @@ import requests
 from dotenv import load_dotenv
 from fastapi import HTTPException
 from fastapi import Request
-
 from google.oauth2 import id_token
+import firebase_admin
+from firebase_admin import auth
+import requests
+
 
 load_dotenv()
 
@@ -42,32 +45,28 @@ async def get_current_user(request: Request):
 #     except Exception as e:
 #         return {"error": str(e)}
 
-import firebase_admin
-from firebase_admin import auth
-import requests
-
 async def create_user(email: str, password: str, name: str):
     try:
         user = auth.create_user(email=email, password=password, display_name=name)
 
         # this is required for sending a verification email
-        signin_payload = {
+        signin_request = {
             "email": email,
             "password": password,
             "returnSecureToken": True
         }
-        signin_response = requests.post(FIREBASE_SIGNIN_URL, json=signin_payload).json()
+        signin_response = requests.post(FIREBASE_SIGNIN_URL, json=signin_request).json()
 
         id_token = signin_response.get("idToken")  # extract the id token
         if not id_token:
             return {"error": "Failed to get ID token for email verification."}
 
         firebase_email_api = f"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={FIREBASE_API_KEY}"
-        email_payload = {
+        email_request = {
             "requestType": "VERIFY_EMAIL",
             "idToken": id_token  
         }
-        email_response = requests.post(firebase_email_api, json=email_payload)
+        email_response = requests.post(firebase_email_api, json=email_request)
 
         # print("Firebase Sign-in Response:", signin_response)  
         # print("Firebase Email Response:", email_response.json())

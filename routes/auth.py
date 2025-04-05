@@ -16,7 +16,9 @@ db = firestore.client()
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     error = request.query_params.get("error", "")
-    return templates.TemplateResponse("login.html", {"request": request, "error": error})
+    status = request.query_params.get("status", "")
+
+    return templates.TemplateResponse("login.html", {"request": request, "error": error, "status": status})
 
 @router.get("/signup", response_class=HTMLResponse)
 async def signup_page(request: Request):
@@ -39,7 +41,7 @@ async def signup(name: str = Form(...), email: str = Form(...), password: str = 
             error_message = result["error"]
     
         return RedirectResponse(url=f"/signup?error={error_message}", status_code=303)
-    return RedirectResponse(url="/login", status_code=303)
+    return RedirectResponse(url="/login?status=Your account has been created successfully. Please verify your email to get started", status_code=303)
 
 @router.post("/login/save")
 async def login(email: str = Form(...), password: str = Form(...)):

@@ -221,10 +221,9 @@ body {
   100% { opacity: 0.3; transform: scale(1); }
 }
 
-
 /* input Area Styles */
 .input-container {
-  padding: 1rem;
+  padding: 0.5rem;
   border-top: 1px solid var(--border-color);
   position: sticky;
   bottom: 0;
@@ -240,8 +239,15 @@ body {
 
 textarea {
   width: 100%;
-  min-height: 60px;
+
+  max-height: 150px;
+  
+  min-height: 30px;
   background-color: transparent;
+
+  resize: none;
+  /* overflow-y: hidden; */
+
   border: none;
   color: var(--text-color);
   resize: none;
@@ -351,3 +357,18 @@ textarea {
   }
 } 
 
+/* 
+textarea::-webkit-scrollbar-button {
+  display: none;
+}
+
+
+textarea::-webkit-scrollbar {
+  width: 8px;  
+}
+
+
+textarea::-webkit-scrollbar-track {
+  background: rgba(5, 241, 221, 0.1);  
+  border-radius: 1px;
+} */

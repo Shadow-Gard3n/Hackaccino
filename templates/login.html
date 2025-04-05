@@ -10,6 +10,54 @@
     <!-- <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js"></script> -->
 </head>
 <body>
+    {% if status %}
+        <div class = "status" style="
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #DFF2BF;
+            color: #4F8A10;
+            padding: 12px 20px;
+            border: 1px solid #4F8A10;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            z-index: 1000;
+        ">{{status}}</div>
+    {% endif %}
+
+    <!-- Loader Overlay -->
+    <!-- <div id="loader-overlay" style="
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(255, 255, 255, 0.8);
+        /* hides it initially */
+        display: none;  
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        ">
+        <div class="spinner" style="
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        "></div>
+    </div>
+
+    <style>
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style> -->
+
+
     <div class="container">
         <form class="login-form" action="/login/save" method="post">
             <h2>Welcome Back</h2>
@@ -58,13 +106,7 @@
             import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
 
             const firebaseConfig = {
-                apiKey: "AIzaSyAndM9OxoBzQE9ap0YCEuPvBGnNmNM7Ayw",
-                authDomain: "fastapi-researchai.firebaseapp.com",
-                projectId: "fastapi-researchai",
-                storageBucket: "fastapi-researchai.appspot.com",
-                messagingSenderId: "464226295155",
-                appId: "1:464226295155:web:7de2276b035776fe597906",
-                measurementId: "G-S1FNDPS2X7"
+                
             };
 
             // Initialize Firebase
@@ -74,6 +116,8 @@
 
             document.getElementById("googleLoginBtn").addEventListener("click", async (e) => {
                 e.preventDefault();
+                // const loader = document.getElementById("loader-overlay");
+                // if (loader) loader.style.display = "flex";
                 try {
                     const result = await signInWithPopup(auth, googleProvider);
                     const idToken = await result.user.getIdToken(); // get firebase token
@@ -101,14 +145,30 @@
             });
 
             function disableButton(button) {
+                // const loader = document.getElementById("loader-overlay");
+                // if (loader) loader.style.display = "flex";
                 button.disabled = true;
                 button.innerHTML = 'Processing...';
                 button.form.submit();
             }
+
             if (window.location.search.includes("error=")) {
                 window.history.replaceState({}, document.title, "/login");
             }
             
+            // window.addEventListener("DOMContentLoaded", () => {
+            //     const statusDiv = document.querySelector(".status");
+            //     if (statusDiv) {
+            //         setTimeout(() => {
+            //             statusDiv.style.transition = "opacity 0.5s ease-out";
+            //             statusDiv.style.opacity = "0";
+            //             setTimeout(() => {
+            //                 statusDiv.style.display = "none";
+            //             }, 500); 
+            //         }, 3000);
+            //     }
+            // });
+
         </script>
     </div>
 </body>

@@ -148,7 +148,6 @@
         // ai response
         if (response.ok) {
             let result = await response.json();
-
             // let formattedAIResponse = result.ai_response
             //   .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>") // Bold (**text**)
             //   .replace(/(?<!\w)_(.*?)_(?!\w)/g, "<i>$1</i>") // Italic (_text_)
@@ -173,7 +172,6 @@
               aiMessage.innerHTML = formattedAIResponse; 
               // aiMessage.innerHTML = result.ai_response; 
 
-
         } else {
             console.error("Failed to send data.");
         }
@@ -186,7 +184,13 @@
         }
     });
 
-
+    document.addEventListener("DOMContentLoaded", function () {
+        const textarea = document.querySelector("textarea");
+        textarea.addEventListener("input", function () {
+            this.style.height = "auto"; // Reset height to auto
+            this.style.height = this.scrollHeight + "px"; // Adjust height to content
+        });
+    });
     </script>
   </body>
 </html>
