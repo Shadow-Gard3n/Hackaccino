@@ -70,6 +70,7 @@ async def get_prompt(
     file: UploadFile = File(None),
     model: str = Form(...),
     search: str = Form(...),
+    Depth: str = Form(...),
     button_value: str = Form(...)
 ):
     file_info = {
@@ -79,6 +80,9 @@ async def get_prompt(
     data_list.append(file_info["file_name"])
     ai_response = gen_ai(message)
     print(button_value) #test
+    print(model) #test
+    print(search) #test
+    print(Depth) #test
     return JSONResponse(content={"user_message": message, "ai_response": ai_response, "data_list": data_list})
 
 @router.post("/history/thread")
@@ -92,7 +96,3 @@ async def get_thread(request: Request):
 
     print("Button value:", button_value) #test
     return JSONResponse(content={"user_message": thread["user"], "ai_response": thread["ai"]})
-
-
-
-

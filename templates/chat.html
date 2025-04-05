@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Chat Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/chatStyle.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
@@ -15,8 +16,6 @@
       </label>
 
       <aside class="sidebar">
-
-        
 
         <button class="new-chat-btn" onclick="newChat()">+ New Chat</button>
 
@@ -49,7 +48,10 @@
 
      <main class="main-content">
         <div class="chat-area">
-          <!-- Messages will appear here -->
+          <!-- message appear here  -->
+          <div class="welcome-message" id="welcomeMessage">
+            <p><b><i>OpenResearcher - X</i></b></p>
+          </div>
         </div>
 
         <form id="messageForm" method="post" action="/prompt" enctype="multipart/form-data">
@@ -81,6 +83,15 @@
                     <option class = "search-value" value="Deep Research">Deep Research</option>
                     <option class = "search-value" value="Pdf/links Talks">Pdf/links Talks</option>
                   </select>
+
+                  <select name="Depth" class="Depth-value">
+                    <option class = "Depth-value" value="">Depth-value</option>
+                    <option class = "Depth-value" value="1">1</option>
+                    <option class = "Depth-value" value="2">2</option>
+                    <option class = "Depth-value" value="3">3</option>
+                    <option class = "Depth-value" value="4">4</option>
+                    <option class = "Depth-value" value="5">5</option>
+                  </select>
                   
                   <button type="submit" class="send-btn">Send</button>
                 </div>
@@ -91,6 +102,9 @@
       </main>
     </div> 
     <script>
+      
+      
+
       let count = 1
       function goToProfile() {
               window.location.href = `/user/{{ user_id }}/profile`;
@@ -143,7 +157,9 @@
         });
         history_form.appendChild(btn);
         count += 1;
+        sessionStorage.setItem("count_reload", count)
       }
+
 
       document.getElementById("chat-button").addEventListener("click", function() {
           document.getElementById("chat-list").style.display = "block";
@@ -163,9 +179,6 @@
 
           const searchDropdown = document.querySelector("select[name='search']");
           searchDropdown.value = "Pdf/links Talks";
-          Array.from(searchDropdown.options).forEach(option => {
-                option.disabled = option.value !== "Pdf/links Talks";
-          });
       });
 
 
@@ -189,14 +202,20 @@
 
         let modelDropdown = document.querySelector("select[name='model']");
         let searchDropdown = document.querySelector("select[name='search']");
+        let depthDropdown = document.querySelector("select[name='Depth']");
 
         let chatArea = document.querySelector(".chat-area");
         let messageInput = document.querySelector("textarea[name='message']");
         let userMessageText = messageInput.value.trim();
         
         if (!modelDropdown.value || !searchDropdown.value) {
-        alert("Please select both a model and a search type.");
-        return; 
+          alert("Please select both a model and a search type.");
+          return; 
+        }
+
+        if(searchDropdown.value === "Deep Research" && !depthDropdown.value){
+          alert("Please select Depth Value");
+          return; 
         }
 
         if (!userMessageText) return; 
@@ -276,8 +295,19 @@
 
     // trigger Data PDF logic
     document.querySelector("select[name='search']").addEventListener("change", function () {
+        const searchDropdown = document.querySelector("select[name='search']");
+        if (searchDropdown.value !== "Pdf/links Talks"){
+                  document.getElementById("data-list").style.display = "none";
+                  document.getElementById("chat-list").style.display = "block";
+        }
         if (this.value === "Pdf/links Talks") {
             document.getElementById("data-button").click(); 
+        }
+        if (this.value === "Deep Research") {
+            document.querySelector("select[name='Depth']").style.display = "block";
+        }
+        else{
+            document.querySelector("select[name='Depth']").style.display = "none";
         }
     });
 
@@ -295,6 +325,84 @@
             this.style.height = this.scrollHeight + "px"; // Adjust height to content
         });
     });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // const history_list = document.getElementById("chat-list");
+      const history_form = document.getElementById("chat-history");
+      const count_reload = sessionStorage.getItem("count_reload");
+      if (count_reload) count = parseInt(count_reload); // update the global count
+
+      for(let j = 1;j<=count_reload;j++){
+        // const btn = document.createElement("button");
+        // btn.type = "button";
+        // btn.textContent = `History ${j+1}`;
+        // btn.value = j + 1;
+        // btn.classList.add("chat-item");
+        
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = `History ${j}`;
+        btn.value = j;
+        btn.classList.add("chat-item");
+        history_form.appendChild(btn)
+      }
+
+      btn.addEventListener("click", async function () {
+            document.getElementById("button-value").value = this.value;
+            const formData = new FormData(history_form);
+            try {
+                const response = await fetch("/history/thread", {
+                    method: "POST",
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const result = await response.json(); 
+                    const userMessages = result.user_message;
+                    const aiMessages = result.ai_response;
+                    const chatArea = document.querySelector(".chat-area");
+                    chatArea.innerHTML="";
+                    for (let i = 0; i < userMessages.length; i++) {
+                        //user message
+                        let userDiv = document.createElement("div");
+                        userDiv.classList.add("chat-message", "user-message");
+                        userDiv.textContent = userMessages[i];
+                        chatArea.appendChild(userDiv);
+
+                        //ai message
+                        let aiDiv = document.createElement("div");
+                        aiDiv.classList.add("chat-message", "ai-message");
+                        aiDiv.textContent = aiMessages[i];
+                        chatArea.appendChild(aiDiv);
+                    }
+                            
+                } else {
+                    console.error("Form submission failed.");
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        });
+      });
+    
+      const welcomeMessage = document.getElementById("welcomeMessage");
+      const inputField = document.querySelector("textarea, input[type='text']");
+      const sendButton = document.querySelector("button[type='submit'], .send-button");
+    
+      function hideWelcome() {
+        if (welcomeMessage) {
+          welcomeMessage.style.display = "none";
+        }
+      }
+    
+      if (inputField) {
+        inputField.addEventListener("input", hideWelcome);
+      }
+    
+      if (sendButton) {
+        sendButton.addEventListener("click", hideWelcome);
+      }
+
     </script>
   </body>
 </html>

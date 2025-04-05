@@ -369,6 +369,21 @@ textarea {
   width: 10vw;
 }
 
+
+.Depth-value{
+  background-color: transparent;
+  border: 0.7px solid white;
+  
+  padding: 0.5rem;
+  border-radius: 15px;
+  /* background-color: var(--primary-color); */
+  color: var(--text-color);
+  /* border: 1px solid var(--border-color); */
+  cursor: pointer;
+  width: 10vw;
+  display: none;
+}
+
 .model-value,
 .search-value {
   color: var(--option-text-color, white);
@@ -454,4 +469,39 @@ textarea::-webkit-scrollbar-track {
 
 #data-list {
   display: none;
+}
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.app-name {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+.welcome-message {
+  text-align: center;
+  color: white;
+  font-size: 1.8rem;
+  margin-top: 0.5rem;
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.welcome-message strong {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 2rem;
 }
