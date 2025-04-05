@@ -63,18 +63,36 @@ async def store_api_keys(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+data_list = []
 @router.post("/prompt")
 async def get_prompt(
     message: str = Form(...),
     file: UploadFile = File(None),
     model: str = Form(...),
-    search: str = Form(...)
+    search: str = Form(...),
+    button_value: str = Form(...)
 ):
     file_info = {
         "file_name": file.filename if file else "No file uploaded",
         "file_content_type": file.content_type if file else "None"
     }
+    data_list.append(file_info["file_name"])
     ai_response = gen_ai(message)
-    return JSONResponse(content={"user_message": message, "ai_response": ai_response})
+    print(button_value) #test
+    return JSONResponse(content={"user_message": message, "ai_response": ai_response, "data_list": data_list})
+
+@router.post("/history/thread")
+async def get_thread(request: Request):
+    form_data = await request.form() 
+    button_value = form_data.get("button_value")
+
+    #need to declare it from llm  
+    thread = {"user": ["hi","bye","test"],
+              "ai": ["hii", "byee","tesssttt"]}
+
+    print("Button value:", button_value) #test
+    return JSONResponse(content={"user_message": thread["user"], "ai_response": thread["ai"]})
+
+
 
 

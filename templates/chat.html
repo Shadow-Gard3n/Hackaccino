@@ -22,23 +22,18 @@
 
         
         <div class="switch-button">
-          <form id = "chat-history" method="post">  
             <button class="chat-button" id="chat-button">History</button>
             <button class="data-button" id="data-button">Data</button>
-          </form>
         </div>
-      
-
+  
         <div class="chat-list" id="chat-list">
-          <button class="chat-item">Previous Chat 1</button>
-          <button class="chat-item">Previous Chat 2</button>
-          <button class="chat-item">Previous Chat 3</button>
+          <form id="chat-history" action="/" method="post">
+            <input type="hidden" name="button_value" id="button-value">
+          </form>
         </div>
         
         <div class="data-list" id="data-list">
-          <button class="data-item">PDF 1</button>
-          <button class="data-item">PDF 2</button>
-          <button class="data-item">PDF 3</button>
+          
         </div>
         
 
@@ -96,11 +91,58 @@
       </main>
     </div> 
     <script>
+      let count = 1
       function goToProfile() {
               window.location.href = `/user/{{ user_id }}/profile`;
           }
       function newChat(){
+        event.preventDefault(); 
         document.querySelector(".chat-area").innerHTML=""
+        const history_form = document.getElementById("chat-history");
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = `History ${count}`;
+        btn.value = count;
+        btn.classList.add("chat-item");
+        
+        btn.addEventListener("click", async function () {
+            document.getElementById("button-value").value = this.value;
+            const formData = new FormData(history_form);
+            try {
+                const response = await fetch("/history/thread", {
+                    method: "POST",
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const result = await response.json(); 
+                    const userMessages = result.user_message;
+                    const aiMessages = result.ai_response;
+                    const chatArea = document.querySelector(".chat-area");
+                    chatArea.innerHTML="";
+                    for (let i = 0; i < userMessages.length; i++) {
+                        //user message
+                        let userDiv = document.createElement("div");
+                        userDiv.classList.add("chat-message", "user-message");
+                        userDiv.textContent = userMessages[i];
+                        chatArea.appendChild(userDiv);
+
+                        //ai message
+                        let aiDiv = document.createElement("div");
+                        aiDiv.classList.add("chat-message", "ai-message");
+                        aiDiv.textContent = aiMessages[i];
+                        chatArea.appendChild(aiDiv);
+                    }
+                            
+                } else {
+                    console.error("Form submission failed.");
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+            }
+        });
+        history_form.appendChild(btn);
+        count += 1;
       }
 
       document.getElementById("chat-button").addEventListener("click", function() {
@@ -143,7 +185,7 @@
       document.getElementById("fileUpload").addEventListener("change", displayFileInfo);
 
       document.getElementById("messageForm").addEventListener("submit", async function(event) {
-        event.preventDefault(); 
+        event.preventDefault();
 
         let modelDropdown = document.querySelector("select[name='model']");
         let searchDropdown = document.querySelector("select[name='search']");
@@ -183,6 +225,7 @@
 
         document.querySelector("textarea[name='message']").value = "";
         document.getElementById("fileInfo").innerHTML = "";
+        formData.append("button_value", count);
 
         let response = await fetch("/prompt", {
             method: "POST",
@@ -212,9 +255,19 @@
             //   .replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, '<img src="$2" alt="$1">') // Images
             //   .replace(/^---$/gm, "<hr>"); // Horizontal line
 
-              let formattedAIResponse = marked.parse(result.ai_response);
-              aiMessage.innerHTML = formattedAIResponse; 
-              // aiMessage.innerHTML = result.ai_response; 
+            let formattedAIResponse = marked.parse(result.ai_response);
+            let dataList = result.data_list;
+            aiMessage.innerHTML = formattedAIResponse; 
+            const dataFiles = document.getElementById("data-list")
+            dataFiles.innerHTML = "";
+            for (let i = 0; i < dataList.length; i++) {
+                  const btn = document.createElement("button");
+                  btn.type = "button";
+                  btn.textContent = dataList[i];
+                  btn.value = count;
+                  btn.classList.add("data-item");
+                  dataFiles.appendChild(btn);
+            }
 
         } else {
             console.error("Failed to send data.");
