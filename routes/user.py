@@ -59,9 +59,7 @@ async def store_api_keys(
             "deepseek_key": deepseek_key,
             "google_key": google_key
         })
-
         return RedirectResponse(url=f"/user/{user_id}/profile", status_code=303)
-    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     

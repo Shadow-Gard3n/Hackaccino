@@ -29,6 +29,7 @@ body {
 
 /* Sidebar Toggle Styles */
 .sidebar-toggle {
+  background-color: #3a3a3a;
   display: none;
 }
 
@@ -38,7 +39,7 @@ body {
   left: 1rem;
   z-index: 1000;
   cursor: pointer;
-  background-color: var(--primary-color);
+  /* background-color: var(--primary-color); */
   padding: 0.5rem;
   border-radius: 5px;
   display: flex;
@@ -55,7 +56,7 @@ body {
 /* Sidebar Styles */
 .sidebar {
   width: var(--sidebar-width);
-  background-color: var(--primary-color);
+  background-color: #17242a;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -75,11 +76,11 @@ body {
 
 
 .new-chat-btn {
-  background-color: #2c2c2c;
+  background-color: #463c3b;
   color: white;
   border: 1px solid var(--border-color);
   padding: 0.8rem;
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
   margin-bottom: 1rem;
   transition: background-color 0.2s;
@@ -89,18 +90,31 @@ body {
   background-color: #3a3a3a;
 }
 
-.chat-button,
-.data-button{
-  background-color: var(--primary-color);
+.chat-button{
+  background-color: #3AAFA9;
   border: 1px solid var(--border-color);
   color: var(--text-color);
   padding: 0.6rem 1rem;
-  border-radius: 5px;
+  border-radius: 15px;
   font-size: 0.9rem;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  width: 19vh;
+  width: 45%;
+
+}
+.data-button{
+  background-color: #3AAFA9;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0.6rem 1rem;
+  border-radius: 15px;
+  font-size: 0.9rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 45%;
+  float: right;
 }
 
 .chat-button:hover,
@@ -188,6 +202,7 @@ body {
 
 /* Main Content Styles */
 .main-content {
+  background-color: #121212;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -206,7 +221,6 @@ body {
 
 /* Chat Area Styles */
 .chat-area {
-  /* color: ; */
   flex-grow: 1;
   padding: 15px;
   overflow-y: auto;
@@ -226,7 +240,7 @@ body {
 }
 
 .ai-message {
-  background-color: #4c82ee;
+  background-color: #463c3b;
   color:white;
   align-self: flex-start;
   text-align: left;
@@ -270,15 +284,15 @@ body {
 /* input Area Styles */
 .input-container {
   padding: 0.5rem;
-  border-top: 1px solid var(--border-color);
+  /* border-top: 1px solid var(--border-color); */
   position: sticky;
   bottom: 0;
   width: 100%
 }
 
 .input-area {
-  background-color: var(--input-bg);
-  border-radius: 10px;
+  background-color: #1e1e1e;
+  border-radius: 15px;
   border: 1px solid var(--border-color);
   padding: 1rem;
 }
@@ -322,17 +336,19 @@ textarea {
 
 .upload-btn {
   background-color: transparent;
-  border: 1px solid var(--border-color);
+  border: 0.7px solid white;
   color: var(--text-color);
   width: 32px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: 15px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
   transition: background-color 0.2s;
+  padding-top: 0px;
+  padding-bottom: 3px;
 }
 
 .upload-btn:hover {
@@ -341,24 +357,34 @@ textarea {
 
 .model-dropdown,
 .search-dropdown {
+  background-color: transparent;
+  border: 0.7px solid white;
+  
   padding: 0.5rem;
-  border-radius: 5px;
-  background-color: var(--primary-color);
+  border-radius: 15px;
+  /* background-color: var(--primary-color); */
   color: var(--text-color);
-  border: 1px solid var(--border-color);
+  /* border: 1px solid var(--border-color); */
   cursor: pointer;
   width: 10vw;
 }
 
+.model-value,
+.search-value {
+  color: var(--option-text-color, white);
+  background-color: var(--option-bg-color, #17242a);
+}
+
 .send-btn {
-  background-color: #1a1a1a;
+  background-color: transparent;
+  border: 0.7px solid white;
   color: white;
-  border: none;
   padding: 0.5rem 1rem;
-  border-radius: 5px;
+  border-radius: 15px;
   cursor: pointer;
   transition: background-color 0.2s;
   margin-left: auto;
+  width: 7%;
 }
 
 .send-btn:hover {

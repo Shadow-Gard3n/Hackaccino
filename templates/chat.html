@@ -15,12 +15,19 @@
       </label>
 
       <aside class="sidebar">
+
+        
+
         <button class="new-chat-btn" onclick="newChat()">+ New Chat</button>
 
+        
         <div class="switch-button">
-          <button class="chat-button" id="chat-button">History</button>
-          <button class="data-button" id="data-button">Data PDF</button>
+          <form id = "chat-history" method="post">  
+            <button class="chat-button" id="chat-button">History</button>
+            <button class="data-button" id="data-button">Data</button>
+          </form>
         </div>
+      
 
         <div class="chat-list" id="chat-list">
           <button class="chat-item">Previous Chat 1</button>
@@ -65,19 +72,19 @@
                   <input type="file" id="fileUpload" name="file" class="upload-btn" style="display: none;">
 
                   <select name="model" class="model-dropdown" required>
-                    <option value="">Search Model</option>
-                    <option value="Deepseek R1">Deepseek R1</option>
-                    <option value="ChatGPT">ChatGPT</option>
-                    <option value="Grok">Grok</option>
-                    <option value="Google">Google</option>
+                    <option class = "model-value" value="">Search Model</option>
+                    <option class = "model-value" value="Deepseek R1">Deepseek R1</option>
+                    <option class = "model-value" value="ChatGPT">ChatGPT</option>
+                    <option class = "model-value" value="Grok">Grok</option>
+                    <option class = "model-value" value="Google">Google</option>
                   </select>
                   
                   <select name="search" class="search-dropdown" required>
-                    <option value="">Search Type</option>
-                    <option value="Web Search">Web Search</option>
-                    <option value="Pro Search">Pro Search</option>
-                    <option value="Deep Research">Deep Research</option>
-                    <option value="Pdf/links Talks">Pdf/links Talks</option>
+                    <option class = "search-value" value="">Search Type</option>
+                    <option class = "search-value" value="Web Search">Web Search</option>
+                    <option class = "search-value" value="Pro Search">Pro Search</option>
+                    <option class = "search-value" value="Deep Research">Deep Research</option>
+                    <option class = "search-value" value="Pdf/links Talks">Pdf/links Talks</option>
                   </select>
                   
                   <button type="submit" class="send-btn">Send</button>
@@ -99,11 +106,24 @@
       document.getElementById("chat-button").addEventListener("click", function() {
           document.getElementById("chat-list").style.display = "block";
           document.getElementById("data-list").style.display = "none";
+
+          const searchDropdown = document.querySelector("select[name='search']");
+          searchDropdown.value = "Web Search";
+          Array.from(searchDropdown.options).forEach(option => {
+                option.disabled = false;
+          });
+          
       });
 
       document.getElementById("data-button").addEventListener("click", function() {
           document.getElementById("data-list").style.display = "block";
           document.getElementById("chat-list").style.display = "none";
+
+          const searchDropdown = document.querySelector("select[name='search']");
+          searchDropdown.value = "Pdf/links Talks";
+          Array.from(searchDropdown.options).forEach(option => {
+                option.disabled = option.value !== "Pdf/links Talks";
+          });
       });
 
 
@@ -198,6 +218,13 @@
 
         } else {
             console.error("Failed to send data.");
+        }
+    });
+
+    // trigger Data PDF logic
+    document.querySelector("select[name='search']").addEventListener("change", function () {
+        if (this.value === "Pdf/links Talks") {
+            document.getElementById("data-button").click(); 
         }
     });
 
