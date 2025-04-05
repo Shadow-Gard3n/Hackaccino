@@ -103,22 +103,8 @@
     </div> 
     <script>
       
-      
-
-      let count = 1
-      function goToProfile() {
-              window.location.href = `/user/{{ user_id }}/profile`;
-          }
-      function newChat(){
-        event.preventDefault(); 
-        document.querySelector(".chat-area").innerHTML=""
+      function attachHistoryButtonListener(btn) {
         const history_form = document.getElementById("chat-history");
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = `History ${count}`;
-        btn.value = count;
-        btn.classList.add("chat-item");
-        
         btn.addEventListener("click", async function () {
             document.getElementById("button-value").value = this.value;
             const formData = new FormData(history_form);
@@ -155,9 +141,27 @@
                 console.error("Fetch error:", error);
             }
         });
-        history_form.appendChild(btn);
-        count += 1;
-        sessionStorage.setItem("count_reload", count)
+    }
+
+      let count = 1
+      function goToProfile() {
+              window.location.href = `/user/{{ user_id }}/profile`;
+          }
+      function newChat(){
+        event.preventDefault(); 
+        if (document.querySelectorAll(".chat-area .chat-message").length > 0){
+              document.querySelector(".chat-area").innerHTML=""
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.textContent = `History ${count}`;
+              btn.value = count;
+              btn.classList.add("chat-item");
+              attachHistoryButtonListener(btn)
+              const history_form = document.getElementById("chat-history");
+              history_form.appendChild(btn);
+              count += 1;
+              sessionStorage.setItem("count_reload", count)
+        }
       }
 
 
@@ -287,6 +291,8 @@
                   btn.classList.add("data-item");
                   dataFiles.appendChild(btn);
             }
+            attachHistoryButtonListener(btn)
+            const history_form = document.getElementById("chat-history");
 
         } else {
             console.error("Failed to send data.");
@@ -332,69 +338,34 @@
       const count_reload = sessionStorage.getItem("count_reload");
       if (count_reload) count = parseInt(count_reload); // update the global count
 
-      for(let j = 1;j<=count_reload;j++){
+      for(let j = 1;j<count_reload;j++){
         // const btn = document.createElement("button");
         // btn.type = "button";
         // btn.textContent = `History ${j+1}`;
         // btn.value = j + 1;
         // btn.classList.add("chat-item");
         
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = `History ${j}`;
-        btn.value = j;
-        btn.classList.add("chat-item");
-        history_form.appendChild(btn)
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = `History ${j}`;
+          btn.value = j;
+          btn.classList.add("chat-item");
+          attachHistoryButtonListener(btn);
+          const history_form = document.getElementById("chat-history");
+          history_form.appendChild(btn);
       }
-
-      btn.addEventListener("click", async function () {
-            document.getElementById("button-value").value = this.value;
-            const formData = new FormData(history_form);
-            try {
-                const response = await fetch("/history/thread", {
-                    method: "POST",
-                    body: formData
-                });
-                
-                if (response.ok) {
-                    const result = await response.json(); 
-                    const userMessages = result.user_message;
-                    const aiMessages = result.ai_response;
-                    const chatArea = document.querySelector(".chat-area");
-                    chatArea.innerHTML="";
-                    for (let i = 0; i < userMessages.length; i++) {
-                        //user message
-                        let userDiv = document.createElement("div");
-                        userDiv.classList.add("chat-message", "user-message");
-                        userDiv.textContent = userMessages[i];
-                        chatArea.appendChild(userDiv);
-
-                        //ai message
-                        let aiDiv = document.createElement("div");
-                        aiDiv.classList.add("chat-message", "ai-message");
-                        aiDiv.textContent = aiMessages[i];
-                        chatArea.appendChild(aiDiv);
-                    }
-                            
-                } else {
-                    console.error("Form submission failed.");
-                }
-            } catch (error) {
-                console.error("Fetch error:", error);
-            }
-        });
+      
       });
     
-      const welcomeMessage = document.getElementById("welcomeMessage");
-      const inputField = document.querySelector("textarea, input[type='text']");
-      const sendButton = document.querySelector("button[type='submit'], .send-button");
+    const welcomeMessage = document.getElementById("welcomeMessage");
+    const inputField = document.querySelector("textarea, input[type='text']");
+    const sendButton = document.querySelector("button[type='submit'], .send-button");
     
-      function hideWelcome() {
+    function hideWelcome() {
         if (welcomeMessage) {
           welcomeMessage.style.display = "none";
         }
       }
-    
       if (inputField) {
         inputField.addEventListener("input", hideWelcome);
       }

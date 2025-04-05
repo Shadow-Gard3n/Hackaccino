@@ -28,7 +28,7 @@ async def get_user(request: Request, current_user: str = Depends(get_current_use
 @router.get("/user/{user_id}/chat", response_class=HTMLResponse)
 async def chat_page(user_id: str, request: Request, current_user: str = Depends(get_current_user)):
     if current_user is None:
-        return RedirectResponse(url="/login", status_code=303)  # Redirect only if user is not logged in
+        return RedirectResponse(url="/login", status_code=303)  # redirect only if user is not logged in
     if current_user != user_id:  
         return RedirectResponse(url=f"/user/{current_user}/chat", status_code=303)  # redirect correctly
     return templates.TemplateResponse("chat.html", {"request": request, "user_id": user_id})
