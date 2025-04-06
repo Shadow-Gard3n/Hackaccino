@@ -85,12 +85,12 @@
                   </select>
 
                   <select name="Depth" class="Depth-value">
-                    <option class = "Depth-value" value="">Depth-value</option>
-                    <option class = "Depth-value" value="1">1</option>
-                    <option class = "Depth-value" value="2">2</option>
-                    <option class = "Depth-value" value="3">3</option>
-                    <option class = "Depth-value" value="4">4</option>
-                    <option class = "Depth-value" value="5">5</option>
+                    <option class = "depth-value" value="">Depth-value</option>
+                    <option class = "depth-value" value="1">1</option>
+                    <option class = "depth-value" value="2">2</option>
+                    <option class = "depth-value" value="3">3</option>
+                    <option class = "depth-value" value="4">4</option>
+                    <option class = "depth-value" value="5">5</option>
                   </select>
                   
                   <button type="submit" class="send-btn">Send</button>
@@ -151,14 +151,14 @@
         event.preventDefault(); 
         if (document.querySelectorAll(".chat-area .chat-message").length > 0){
               document.querySelector(".chat-area").innerHTML=""
-              // const btn = document.createElement("button");
-              // btn.type = "button";
-              // btn.textContent = `History ${count}`;
-              // btn.value = count;
-              // btn.classList.add("chat-item");
-              // attachHistoryButtonListener(btn)
-              // const history_form = document.getElementById("chat-history");
-              // history_form.appendChild(btn);
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.textContent = `History ${count}`;
+              btn.value = count;
+              btn.classList.add("chat-item");
+              attachHistoryButtonListener(btn)
+              const history_form = document.getElementById("chat-history");
+              history_form.appendChild(btn);
               count += 1;
               sessionStorage.setItem("count_reload", count)
         }
@@ -243,14 +243,14 @@
         chatArea.appendChild(aiMessage);
         chatArea.scrollTop = chatArea.scrollHeight;
 
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = `History ${count}`;
-        btn.value = count;
-        btn.classList.add("chat-item");
-        attachHistoryButtonListener(btn)
-        const history_form = document.getElementById("chat-history");
-        history_form.appendChild(btn);
+        // const btn = document.createElement("button");
+        // btn.type = "button";
+        // btn.textContent = `History ${count}`;
+        // btn.value = count;
+        // btn.classList.add("chat-item");
+        // attachHistoryButtonListener(btn)
+        // const history_form = document.getElementById("chat-history");
+        // history_form.appendChild(btn);
 
         // send request
         let formData = new FormData(this);
@@ -345,15 +345,9 @@
       // const history_list = document.getElementById("chat-list");
       const history_form = document.getElementById("chat-history");
       const count_reload = sessionStorage.getItem("count_reload");
-      if (count_reload) count = parseInt(count_reload); // update the global count
+      if (count_reload) count = parseInt(count_reload); 
 
       for(let j = 1;j<count_reload;j++){
-        // const btn = document.createElement("button");
-        // btn.type = "button";
-        // btn.textContent = `History ${j+1}`;
-        // btn.value = j + 1;
-        // btn.classList.add("chat-item");
-        
           const btn = document.createElement("button");
           btn.type = "button";
           btn.textContent = `History ${j}`;

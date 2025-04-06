@@ -385,7 +385,8 @@ textarea {
 }
 
 .model-value,
-.search-value {
+.search-value,
+.depth-value {
   color: var(--option-text-color, white);
   background-color: var(--option-bg-color, #17242a);
 }

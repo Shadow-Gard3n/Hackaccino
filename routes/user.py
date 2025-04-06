@@ -7,8 +7,7 @@ from firebase_admin import auth
 from fastapi import APIRouter, HTTPException
 from models.ApiDatabase import APIKeys
 from service.firebase_service import db
-from service.llm import gen_ai
-
+from service.llm import gen_ai_basic_search,gen_ai_web_search, gen_ai_deep_search, gen_ai_pdf_search, gen_ai_pro_search, open_ai_deep_search, open_ai_pdf_search, open_ai_pro_search, open_ai_web_search, deepseek_ai_deep_search,deepseek_ai_pdf_search,deepseek_ai_pro_search, deepseek_ai_web_search, grok_ai_deep_search, grok_ai_pdf_search, grok_ai_pro_search,grok_ai_web_search
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -63,7 +62,6 @@ async def store_api_keys(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-data_list = []
 @router.post("/prompt")
 async def get_prompt(
     message: str = Form(...),
@@ -77,13 +75,52 @@ async def get_prompt(
         "file_name": file.filename if file else "No file uploaded",
         "file_content_type": file.content_type if file else "None"
     }
-    data_list.append(file_info["file_name"])
-    ai_response = gen_ai(message)
-    print(button_value) #test
-    print(model) #test
-    print(search) #test
-    print(Depth) #test
-    return JSONResponse(content={"user_message": message, "ai_response": ai_response, "data_list": data_list})
+
+    
+
+    if model == "ChatGPT":
+        if search == "Web Search":
+            ai_response = open_ai_web_search(message, button_value)
+        elif search == "Pro search":
+            ai_response = open_ai_pro_search(message, button_value)
+        elif search == "Deep Research":
+            ai_response = open_ai_deep_search(message, button_value)
+        elif search == "Pdf/links Talks":
+            ai_response = open_ai_pdf_search(message, button_value)
+    if model == "Deepseek R1":
+        if search == "Web Search":
+            ai_response = deepseek_ai_web_search(message, button_value)
+        elif search == "Pro search":
+            ai_response = deepseek_ai_pro_search(message, button_value)
+        elif search == "Deep Research":
+            ai_response = deepseek_ai_deep_search(message, button_value)
+        elif search == "Pdf/links Talks":
+            ai_response = deepseek_ai_pdf_search(message, button_value)
+
+    if model == "Grok":
+        if search == "Web Search":
+            ai_response = grok_ai_web_search(message, button_value)
+        elif search == "Pro search":
+            ai_response = grok_ai_pro_search(message, button_value)
+        elif search == "Deep Research":
+            ai_response = grok_ai_deep_search(message, button_value)
+        elif search == "Pdf/links Talks":
+            ai_response = grok_ai_pdf_search(message, button_value)
+    if model == "ChatGPT":
+        if search == "Web Search":
+            ai_response = gen_ai_web_search(message, button_value)
+        elif search == "Pro search":
+            ai_response = gen_ai_pro_search(message, button_value)
+        elif search == "Deep Research":
+            ai_response = gen_ai_deep_search(message, button_value)
+        elif search == "Pdf/links Talks":
+            ai_response = gen_ai_pdf_search(message, button_value)
+
+    # can remove it after implementation 
+    ai_response = gen_ai_basic_search(message, button_value)
+
+
+    return JSONResponse(content={"user_message": message, "ai_response": ai_response})
 
 @router.post("/history/thread")
 async def get_thread(request: Request):
@@ -91,8 +128,10 @@ async def get_thread(request: Request):
     button_value = form_data.get("button_value")
 
     #need to declare it from llm 
-    thread = {"user": ["hi","bye","test"],
-              "ai": ["hii", "byee","tesssttt"]}
+    thread = {"user":["hi","bye"],
+              "ai":["hii","byee"]}
 
     print("Button value:", button_value) #test
     return JSONResponse(content={"user_message": thread["user"], "ai_response": thread["ai"]})
+
+
