@@ -8,6 +8,19 @@
 
 ---
 
+## 👥 Team
+
+**Team Name:** The Boys
+
+**Team Members:**
+- Aryan Gahlot  
+- Lakhan Gupta  
+- Yash Mittal  
+- Vivek  
+- Tarush Saxena  
+
+---
+
 ## 🚧 Project Status
 
 > ✅ Frontend: **Complete**  
