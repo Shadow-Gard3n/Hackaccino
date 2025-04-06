@@ -17,8 +17,12 @@
 
 ## 📸 Screenshots
 
-> <img src="https://github.com/user-attachments/assets/014d176f-225c-4357-bdd4-3df2925a2ba5" width="200"/>
-> ![image](https://github.com/user-attachments/assets/51990848-8851-40f4-95c2-672ee1761b68)
+<!-- First Image -->
+<img src="https://github.com/user-attachments/assets/014d176f-225c-4357-bdd4-3df2925a2ba5" width="400"/>
+
+<!-- Second Image -->
+<img src="https://github.com/user-attachments/assets/51990848-8851-40f4-95c2-672ee1761b68" width="600"/>
+
 
 ---
 
