@@ -17,7 +17,7 @@
 
 ## 📸 Screenshots
 
-> ![image](https://github.com/user-attachments/assets/014d176f-225c-4357-bdd4-3df2925a2ba5)
+> <img src="https://github.com/user-attachments/assets/014d176f-225c-4357-bdd4-3df2925a2ba5" width="200"/>
 > ![image](https://github.com/user-attachments/assets/51990848-8851-40f4-95c2-672ee1761b68)
 
 ---
@@ -44,7 +44,7 @@
 | Frontend        | Backend              | AI/ML               | Auth & DB          |
 |-----------------|----------------------|---------------------|--------------------|
 | HTML + Jinja2   | FastAPI              | LangChain           | Firebase Auth      |
-| Css             | Python (3.10+)       | Google GenAI        | Firestore Database |
+| CSS             | Python (3.10+)       | Google GenAI        | Firestore Database |
 | JavaScript      | REST API (FastAPI)   | OpenAI, DeepSeek AI |                    |
 
 ---
@@ -73,10 +73,10 @@ Hackaccino/
 ```
 
 
+## To run use these commands
 ```
 git clone https://github.com/Shadow-Gard3n/Hackaccino.git
 cd Hackaccino
-```
-
-```
 pip install fastapi uvicorn python-dotenv firebase-admin requests langchain langchain-google-genai google-auth jinja2 pydantic
+uvicorn main:app --reload
+
