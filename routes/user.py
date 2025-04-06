@@ -90,7 +90,7 @@ async def get_thread(request: Request):
     form_data = await request.form() 
     button_value = form_data.get("button_value")
 
-    #need to declare it from llm  
+    #need to declare it from llm 
     thread = {"user": ["hi","bye","test"],
               "ai": ["hii", "byee","tesssttt"]}
 
