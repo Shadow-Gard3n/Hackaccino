@@ -24,7 +24,9 @@
 ## 🚧 Project Status
 
 > ✅ Frontend: Complete
+
 > ✅ Database & Routes (Auth): Complete
+
 > ⚙️ LLM Integration (Response Handling): In Progress
 
 ---
